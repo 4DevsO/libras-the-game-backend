@@ -8,6 +8,13 @@ class Database {
 
     // Database Name
     this.dbName = dbName;
+    console.log(`trying to connect to ${url} ...`);
+    const client = new MongoClient(url, { useNewUrlParser: true });
+    client.connect(err => {
+      assert.equal(null, err);
+      console.log("...connected");
+      client.close();
+    });
   }
 
   insertDocument(document, className) {
