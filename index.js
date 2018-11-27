@@ -1,6 +1,6 @@
 const Database = require("./database");
 const mlab_url = require("./config/keys").mlab_url;
-const mongoDB = new Database("libras_o_jogo");
+const mongoDB = new Database("libras_o_jogo", mlab_url);
 const express = require("express");
 const bodyParser = require("body-parser");
 const Utils = require("./utils");
