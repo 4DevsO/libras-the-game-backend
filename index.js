@@ -144,15 +144,20 @@ app.get("/game", async (req, res) => {
   let configuracao = {};
   let tentativas = 11;
   do {
-    resposta = (await mongoDB.randomDocument("palavras", 1))[0];
-    configuracao =
-      resposta.configuracoes[
-        Math.floor(Math.random() * resposta.configuracoes.length)
-      ];
-    palavras_nin = await mongoDB.findDocuments("palavras", {
-      "configuracoes.nome": { $nin: [configuracao.nome] }
-    });
-    tentativas -= 1;
+    try {
+      resposta = (await mongoDB.randomDocument("palavras", 1))[0];
+      configuracao =
+        resposta.configuracoes[
+          Math.floor(Math.random() * resposta.configuracoes.length)
+        ];
+      palavras_nin = await mongoDB.findDocuments("palavras", {
+        "configuracoes.nome": { $nin: [configuracao.nome] }
+      });
+      tentativas -= 1;
+    } catch (error) {
+      palavras_nin = [];
+      break;
+    }
   } while (palavras_nin.length < 3 && tentativas > 0);
   if (palavras_nin.length > 3) {
     const alternativas = Utils.getRandom(palavras_nin, 3);
