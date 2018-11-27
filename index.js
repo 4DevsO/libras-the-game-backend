@@ -142,6 +142,7 @@ app.get("/game", async (req, res) => {
   let palavras_nin = [];
   let resposta = {};
   let configuracao = {};
+  let tentativas = 11;
   do {
     resposta = (await mongoDB.randomDocument("palavras", 1))[0];
     configuracao =
@@ -151,14 +152,18 @@ app.get("/game", async (req, res) => {
     palavras_nin = await mongoDB.findDocuments("palavras", {
       "configuracoes.nome": { $nin: [configuracao.nome] }
     });
-  } while (palavras_nin.length < 4);
-
-  const alternativas = Utils.getRandom(palavras_nin, 3);
-  const palavras = Utils.shuffle([...alternativas, resposta]);
-  const ojogo = {
-    palavras: palavras,
-    configuracao: configuracao,
-    resposta: resposta
-  };
-  res.send(ojogo);
+    tentativas -= 1;
+  } while (palavras_nin.length < 3 && tentativas > 0);
+  if (palavras_nin.length > 3) {
+    const alternativas = Utils.getRandom(palavras_nin, 3);
+    const palavras = Utils.shuffle([...alternativas, resposta]);
+    const ojogo = {
+      palavras: palavras,
+      configuracao: configuracao,
+      resposta: resposta
+    };
+    res.send(ojogo);
+  } else {
+    res.status(500).send("não foi possivel criar o jogo");
+  }
 });
