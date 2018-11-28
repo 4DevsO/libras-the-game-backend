@@ -11,7 +11,9 @@
       <br />
       <label>nome</label> <input id="config-add-nome" type="text" /><br />
       <label>imagem</label> <input id="config-add-img" type="file" /><br />
-      <button onclick="saveConfig()">SALVAR CONFIGURACAO</button><br />
+      <button id="config-add-btn" onclick="saveConfig()">
+        SALVAR CONFIGURACAO</button
+      ><br />
       <p id="config-add-res"></p>
       <br />
     </div>
@@ -23,7 +25,9 @@
       <label>nome</label> <input id="palavra-add-nome" type="text" /><br />
       <label>configuracoes(SEPARADO POR VIGURLAS)</label>
       <input id="palavra-add-config" /><br />
-      <button onclick="savePalavra()">SALVAR PALAVRA</button>
+      <button id="palavra-add-btn" onclick="savePalavra()">
+        SALVAR PALAVRA
+      </button>
       <p id="palavra-add-res"></p>
     </div>
   </body>
@@ -33,27 +37,38 @@
     const nome_input = document.getElementById("palavra-add-nome");
     const configuracao_input = document.getElementById("palavra-add-config");
     const p_out = document.getElementById("palavra-add-res");
+    const button = document.getElementById("palavra-add-btn");
     if (nome_input.value && configuracao_input.value) {
-      const settings = {
-        async: false,
-        crossDomain: true,
-        contentType: false,
-        type: "POST",
-        url: "https://libras-o-jogo.herokuapp.com/palavras/add",
-        hearders: {
-          Accept: "application/json"
-        },
-        data: {
-          palavra: {
-            nome: nome_input.value,
-            configuracoes: configuracao_input.value.split(",")
-          }
+      button.disabled = true;
+      p_out.innerText = "SALVANDO... AGUARDE";
+      const formData = {
+        palavra: {
+          nome: nome_input.value,
+          configuracoes: configuracao_input.value.split(",")
         }
       };
-      $.ajax(settings).done(response => {
-        p_out.innerText = response;
-      });
+      fetch("https://libras-o-jogo.herokuapp.com/palavras/add", {
+        method: "post",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(formData)
+      })
+        .then(result => {
+          if (result.status == 200) {
+            p_out.innerText = `${formData.palavra.nome} ADICIONADO COM SUCESSO`;
+          } else {
+            p_out.innerText = result.statusText;
+          }
+          button.disabled = false;
+        })
+        .catch(err => {
+          button.disabled = false;
+          p_out.innerText = err;
+        });
     } else {
+      button.disabled = false;
       p_out.innerText = "ALGUM CAMPO EM BRANCO";
     }
   };
@@ -61,44 +76,59 @@
     const img_input = document.getElementById("config-add-img");
     const nome_input = document.getElementById("config-add-nome");
     const p_out = document.getElementById("config-add-res");
+    const button = document.getElementById("config-add-btn");
     if (img_input.value && nome_input.value) {
+      button.disabled = true;
+      p_out.innerText = "SALVANDO... AGUARDE";
       const img = img_input.files[0];
       const headers = {
-        Authorization: "Client-ID f33f400641ab02a",
-        Accept: "application/json"
-      };
-      const settings = {
-        async: false,
-        crossDomain: true,
-        processData: false,
-        contentType: false,
-        type: "POST",
-        url: "https://api.imgur.com/3/image",
-        headers: headers,
-        mimeType: "multipart/form-data"
+        Authorization: "Client-ID f33f400641ab02a"
       };
       const formdata = new FormData();
       formdata.append("image", img);
-      settings.data = formdata;
-      $.ajax(settings).done(response => {
-        response = JSON.parse(response);
-        const settings2 = {
-          async: false,
-          crossDomain: true,
-          processData: false,
-          contentType: false,
-          type: "POST",
-          url: "https://libras-o-jogo.herokuapp.com/configuracoes/add",
-          contentType: "application/json",
-          data: {
-            configuracao: { nome: nome_input.value, imagem: response.data.link }
-          }
-        };
-        $.ajax(settings2).done(result => {
-          p_out.innerText = result;
+      fetch("https://api.imgur.com/3/image", {
+        method: "post",
+        headers: headers,
+        body: formdata
+      })
+        .then(result => result.json())
+        .then(data => {
+          const configuracao = {
+            configuracao: {
+              nome: nome_input.value,
+              imagem: data.data.link
+            }
+          };
+          fetch("https://libras-o-jogo.herokuapp.com/configuracoes/add", {
+            method: "post",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify(configuracao)
+          })
+            .then(result => {
+              if (result.status == 200) {
+                p_out.innerText = `${
+                  configuracao.configuracao.nome
+                } ADICIONADO COM SUCESSO`;
+                button.disabled = false;
+              } else {
+                button.disabled = false;
+                p_out.innerText = result.statusText;
+              }
+            })
+            .catch(err => {
+              button.disabled = false;
+              p_out.innerText = err;
+            });
+        })
+        .catch(err => {
+          button.disabled = false;
+          p_out.innerText = err;
         });
-      });
     } else {
+      button.disabled = false;
       p_out.innerText = "ALGUM CAMPO EM BRANCO...";
     }
   };
