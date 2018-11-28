@@ -67,6 +67,7 @@ app.get("/configuracoes/", (req, res) => {
 });
 
 app.post("/palavras/add", async (req, res) => {
+  console.log(req.body);
   if (req.body && req.body.palavra) {
     const palavra = req.body.palavra;
     if (palavra.nome && palavra.configuracoes) {

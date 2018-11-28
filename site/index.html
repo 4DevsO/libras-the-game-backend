@@ -21,7 +21,8 @@
       <h3>PALAVRAS</h3>
       <br />
       <label>nome</label> <input id="palavra-add-nome" type="text" /><br />
-      <label>configuracoes</label> <input id="palavra-add-config" /><br />
+      <label>configuracoes(SEPARADO POR VIGURLAS)</label>
+      <input id="palavra-add-config" /><br />
       <button onclick="savePalavra()">SALVAR PALAVRA</button>
       <p id="palavra-add-res"></p>
     </div>
@@ -30,17 +31,31 @@
 <script>
   const savePalavra = () => {
     const nome_input = document.getElementById("palavra-add-nome");
-    const palavra_input = document.getElementById("palavra-add-config");
+    const configuracao_input = document.getElementById("palavra-add-config");
     const p_out = document.getElementById("palavra-add-res");
-    const settings = {
-      async: false,
-      crossDomain: true,
-      processData: false,
-      contentType: false,
-      type: "POST",
-      url: "https://libras-o-jogo.herokuapp.com/palavras/add",
-      contentType: "application/json"
-    };
+    if (nome_input.value && configuracao_input.value) {
+      const settings = {
+        async: false,
+        crossDomain: true,
+        contentType: false,
+        type: "POST",
+        url: "https://libras-o-jogo.herokuapp.com/palavras/add",
+        hearders: {
+          Accept: "application/json"
+        },
+        data: {
+          palavra: {
+            nome: nome_input.value,
+            configuracoes: configuracao_input.value.split(",")
+          }
+        }
+      };
+      $.ajax(settings).done(response => {
+        p_out.innerText = response;
+      });
+    } else {
+      p_out.innerText = "ALGUM CAMPO EM BRANCO";
+    }
   };
   const saveConfig = () => {
     const img_input = document.getElementById("config-add-img");
