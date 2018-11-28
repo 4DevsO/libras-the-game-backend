@@ -2,16 +2,23 @@ const Database = require("./database");
 const mlab_url = require("./config/keys").mlab_url;
 const mongoDB = new Database("libras_o_jogo", mlab_url);
 const express = require("express");
+const cors = require("cors");
 const bodyParser = require("body-parser");
 const Utils = require("./utils");
+const path = require("path");
 
 const app = express();
 
 app.use(bodyParser.json());
+app.use(cors());
 
 const port = process.env.PORT || 5000;
 const server = app.listen(port, server => {
   console.log(`listening on ${port}`);
+});
+
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname + "/site/index.html"));
 });
 
 app.post("/configuracoes/add", (req, res) => {
