@@ -1,5 +1,6 @@
 # Pip imports
 from flask import Flask
+from flask_cors import CORS
 
 # Internal imports
 from libras_the_game.common.clients.imgur_client import ImgurClient
@@ -18,6 +19,7 @@ def create_app(is_production: bool = False) -> Flask:
     settings = Settings.parse_file(f"libras_the_game/config/{settings_file}")
 
     app = Flask(__name__)
+    CORS(app)
 
     app.config["settings"] = settings
 
