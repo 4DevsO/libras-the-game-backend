@@ -1,0 +1,28 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+flask-restful = "*"
+pydantic = "*"
+flask-pydantic = "*"
+pymongo = "*"
+requests = "*"
+pydantic-mongo = "*"
+
+[dev-packages]
+pytest = "*"
+pytest-mock = "*"
+flake8 = "*"
+isort = "*"
+black = "*"
+
+[requires]
+python_version = "3.9"
+
+[scripts]
+dev = "python server.py"
+
+[pipenv]
+allow_prereleases = true

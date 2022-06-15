@@ -1,0 +1,12 @@
+{
+    "database_settings": {
+        "username": "#{database-username}#",
+        "password": "#{database-password}#",
+        "database": "#{database-database}#",
+        "cluster": "#{database-cluster}#"
+    },
+    "imgur_settings": {
+        "base_url": "https://api.imgur.com",
+        "auth_key": "Client-ID #{imgur-auth}#"
+    }
+}
