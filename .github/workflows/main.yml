@@ -13,6 +13,12 @@ jobs:
       - uses: cschleiden/replace-tokens@v1
         with:
           files: '["**/*.json"]'
+        env:
+          DATABASE_PASSWORD: ${{secrets.DATABASE_PASSWORD}}
+          DATABASE_DATABASE: ${{secrets.DATABASE_DATABASE}}
+          DATABASE_USERNAME: ${{secrets.DATABASE_USERNAME}}
+          DATABASE_CLUSTER: ${{secrets.DATABASE_CLUSTER}}
+          IMGUR_AUTH: ${{secrets.IMGUR_AUTH}}
       - uses: akhileshns/heroku-deploy@v3.12.12
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
