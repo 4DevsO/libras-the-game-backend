@@ -7,7 +7,7 @@ name = "pypi"
 flask-restful = "*"
 pydantic = "*"
 flask-pydantic = "*"
-pymongo = "*"
+pymongo = {extras = ["srv"], version = "*"}
 requests = "*"
 pydantic-mongo = "*"
 
