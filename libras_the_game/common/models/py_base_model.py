@@ -9,4 +9,4 @@ class PyBaseModel(BaseModel):
 
     class Config:
         arbitrary_types_allowed = True
-        json_encoders = {ObjectId: lambda v: str(v)}
+        json_encoders = {ObjectId: str}

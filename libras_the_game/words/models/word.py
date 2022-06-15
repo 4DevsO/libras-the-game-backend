@@ -1,7 +1,8 @@
 # Python imports
-from typing import List, Optional
+from typing import List
 
 # Pip imports
+from pydantic import Field
 from pydantic_mongo import ObjectIdField
 
 # Internal imports
@@ -12,4 +13,4 @@ from libras_the_game.hand_configs.models.hand_config import HandConfig
 class Word(PyBaseModel):
     word: str
     hand_configs: List[ObjectIdField]
-    hand_configs_obj: Optional[List[HandConfig]]
+    hand_configs_obj: List[HandConfig] = Field(default=None, exclude=True)

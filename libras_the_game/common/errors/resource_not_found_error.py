@@ -8,8 +8,6 @@ from libras_the_game.common.errors.field_error import FieldError
 
 
 class ResourceNotFoundError(BaseError):
-    code = BAD_REQUEST
-
     def __init__(self, resources: dict[str, Union[str, None]]) -> None:
         errors = []
         for field, value in resources.items():
@@ -18,4 +16,4 @@ class ResourceNotFoundError(BaseError):
             else:
                 message = "Resource not found"
             errors.append(FieldError(field=field, message=message))
-        super().__init__(field_errors=errors)
+        super().__init__(code=BAD_REQUEST, field_errors=errors)

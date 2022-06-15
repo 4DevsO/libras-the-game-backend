@@ -2,6 +2,7 @@
 from flask_restful import Resource
 
 # Internal imports
+from libras_the_game.auth.decorators.authenticate import authenticate
 from libras_the_game.common.decorators.use_pydantic import use_pydantic
 from libras_the_game.common.errors.missing_fields_error import MissingFieldsError
 from libras_the_game.words.models import CreateWord, DeleteWord
@@ -15,12 +16,14 @@ class Words(Resource):
     def get(self):
         return get_words()
 
+    @authenticate
     @use_pydantic()
     def post(self, body: CreateWord):
         if not body.hand_configs and not body.hand_configs_names:
             raise MissingFieldsError(["hand_configs"])
         return create_word(body), 201
 
+    @authenticate
     @use_pydantic()
     def delete(self, query: DeleteWord):
         return delete_word(query)

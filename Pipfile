@@ -5,12 +5,13 @@ name = "pypi"
 
 [packages]
 flask-restful = "*"
-pydantic = "*"
+pydantic = {extras = ["email"], version = "*"}
 flask-pydantic = "*"
 pymongo = {extras = ["srv"], version = "*"}
 requests = "*"
 pydantic-mongo = "*"
 flask-cors = "*"
+pyjwt = {extras = ["crypto"], version = "*"}
 
 [dev-packages]
 pytest = "*"

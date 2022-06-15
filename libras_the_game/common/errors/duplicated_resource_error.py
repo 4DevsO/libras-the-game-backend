@@ -8,8 +8,6 @@ from libras_the_game.common.errors.field_error import FieldError
 
 
 class DuplicatedResourceError(BaseError):
-    code = CONFLICT
-
     def __init__(self, resources: dict[str, Union[str, None]]) -> None:
         errors = []
         for field, value in resources.items():
@@ -18,4 +16,4 @@ class DuplicatedResourceError(BaseError):
             else:
                 message = "Resource already exists"
             errors.append(FieldError(field=field, message=message))
-        super().__init__(field_errors=errors)
+        super().__init__(code=CONFLICT, field_errors=errors)

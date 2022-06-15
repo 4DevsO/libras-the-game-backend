@@ -19,6 +19,8 @@ jobs:
           DATABASE_USERNAME: ${{secrets.DATABASE_USERNAME}}
           DATABASE_CLUSTER: ${{secrets.DATABASE_CLUSTER}}
           IMGUR_AUTH: ${{secrets.IMGUR_AUTH}}
+          AUTH_API_KEY: ${{secrets.AUTH_API_KEY}}
+          AUTH_SECRET_KEY: ${{secrets.AUTH_SECRET_KEY}}
       - uses: akhileshns/heroku-deploy@v3.12.12
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}

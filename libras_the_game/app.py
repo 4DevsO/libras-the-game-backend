@@ -3,6 +3,7 @@ from flask import Flask
 from flask_cors import CORS
 
 # Internal imports
+from libras_the_game.auth import auth_bp
 from libras_the_game.common.clients.imgur_client import ImgurClient
 from libras_the_game.config.settings import Settings
 from libras_the_game.database import Database
@@ -30,5 +31,6 @@ def create_app(is_production: bool = False) -> Flask:
     app.register_blueprint(hand_configs_bp)
     app.register_blueprint(words_bp)
     app.register_blueprint(game_bp)
+    app.register_blueprint(auth_bp)
 
     return app

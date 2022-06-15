@@ -8,5 +8,10 @@
     "imgur_settings": {
         "base_url": "https://api.imgur.com",
         "auth_key": "Client-ID #{IMGUR_AUTH}#"
+    },
+    "auth_settings": {
+        "api_key": "#{AUTH_API_KEY}#",
+        "secret_key": "#{AUTH_SECRET_KEY}#",
+        "expiration_time_minutes": 60
     }
 }

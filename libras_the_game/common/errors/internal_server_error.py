@@ -7,8 +7,6 @@ from libras_the_game.common.errors.field_error import FieldError
 
 
 class InternalServerError(BaseError):
-    code = INTERNAL_SERVER_ERROR
-
     def __init__(self, message: str, field: str = "server"):
         error = FieldError(field=field, message=message)
-        super().__init__(field_errors=[error])
+        super().__init__(code=INTERNAL_SERVER_ERROR, field_errors=[error])
